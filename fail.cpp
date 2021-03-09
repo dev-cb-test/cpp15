@@ -4,6 +4,7 @@ int memcheckFailDemo(int* arrayStack, unsigned int arrayStackLen,
 	int* arrayHeap, unsigned int arrayHeapLen) {
   int Stack[101];
 
+
   Static[100] = 0; 
   Stack[100] = 0; 
 
