@@ -1,297 +1,136 @@
-# njsscan
-**njsscan** is a static application testing (SAST) tool that can find insecure code patterns in your node.js applications using simple pattern matcher from [libsast](https://github.com/ajinabraham/libsast) and syntax-aware semantic code pattern search tool [semgrep](https://github.com/returntocorp/semgrep).
+<img src="https://www.kaspersky.com.br/content/pt-br/images/repository/isc/2017-images/virus-img-19.jpg" width="100%" />
 
-Made with ![Love](https://cloud.githubusercontent.com/assets/4301109/16754758/82e3a63c-4813-11e6-9430-6015d98aeaab.png) in India  [![Tweet](https://img.shields.io/twitter/url?url=https://github.com/ajinabraham/njsscan)](https://twitter.com/intent/tweet/?text=njsscan%20is%20a%20semantic%20aware%20SAST%20tool%20that%20can%20find%20insecure%20code%20patterns%20in%20your%20Node.js%20applications%20by%20%40ajinabraham%20%40OpenSecurity_IN&url=https://github.com/ajinabraham/njsscan)
+<h1>BOVSTT</h1>
 
-[![PyPI version](https://badge.fury.io/py/njsscan.svg)](https://badge.fury.io/py/njsscan)
-[![platform](https://img.shields.io/badge/platform-osx%2Flinux-green.svg)](https://github.com/ajinabraham/njsscan)
-[![License](https://img.shields.io/:license-lgpl3+-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0.en.html)
-[![python](https://img.shields.io/badge/python-7+-blue.svg)](https://www.python.org/downloads/)
+<h2>Buffer Overflow Vulnerability Services Tester Tool</h2>
 
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/ajinabraham/njsscan.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ajinabraham/njsscan/context:python)
-[![Requirements Status](https://requires.io/github/ajinabraham/njsscan/requirements.svg?branch=master)](https://requires.io/github/ajinabraham/njsscan/requirements/?branch=master)
-[![Build](https://github.com/ajinabraham/njsscan/workflows/Build/badge.svg)](https://github.com/ajinabraham/njsscan/actions?query=workflow%3ABuild)
+Program to detect the existence of remote / local stack-based buffer-overflow vulnerabilities using the 
+standard communication protocol for each service.<br><br>
+The application allows to customize the testing mechanism of each service through templates, these 
+templates are simply plain text files, which accept some kind of special words (see STF section), these files 
+are stored in the <services> folder with a direct association between the protocol and the template and with 
+the extension STF (Service Tester File).<br><br>
+Currently the application version 2.5 supports the FTP, IMAP, POP3 and SMTP protocol.<br><br>
+To carry out this task the application allows to specify different types of parameters.
 
-### Support njsscan
+<h2>Parameters</h2>
 
-* **Donate via Paypal:** [![Donate via Paypal](https://user-images.githubusercontent.com/4301109/76471686-c43b0500-63c9-11ea-8225-2a305efb3d87.gif)](https://paypal.me/ajinabraham)
-* **Sponsor the Project:** [![Github Sponsors](https://user-images.githubusercontent.com/4301109/95517226-9e410780-098e-11eb-9ef5-7b8c7561d725.png)](https://github.com/sponsors/ajinabraham)
+<h3>Aplication Layer Protocol</h3>
+Description: Specifies the type of protocol to be tested.<br>
+Required: Yes<br>
+Options: -ap --application-layer-protocol &ltprotocol&gt<br>
+Accepted values: FTP, POP3 or SMTP
 
-### e-Learning Courses & Certifications
-[![OpSecX Video Course](https://user-images.githubusercontent.com/4301109/82597198-99fa8600-9b76-11ea-8243-c604bc7b06b1.png)](https://opsecx.com/index.php/product/node-js-security-pentesting-and-exploitation/?uid=github) [OpSecX Node.js Security: Pentesting and Exploitation - NJS](https://opsecx.com/index.php/product/node-js-security-pentesting-and-exploitation/?uid=github)
+<h3>Target Hostname IP</h3>
+Description: Specifies host / ip address to be tested<br>
+Required: Yes<br>
+Options: -th --target-hostname-ip &lthostname&gt<br>
+Accepted values: Any valid host / ip address.
 
-## Installation
+<h3>Target Port</h3>
+Description: Specifies the destination port of the service.<br>
+Required: No<br>
+Options: -tp --target-port &ltport&gt<br>
+Accepted values: 1 - 65535<br> 
+If the user does not enter this parameter the application will automatically try to connect to the default 
+destination port according to the service and the type of encryption.<br>
+For example for POP3 service and SSL encryption the default port would be 995.
 
-`pip install njsscan`
+<h3>Cryptographic Security Protocol</h3>
+Description: Specifies the type of service encryption.<br> 
+Required: No<br> 
+Options: -cp --cryptographic-security-protocol &ltcrypt protocol&gt<br>  
+Accepted values: SSL, TLS<br>  
+Note: No support yet.
 
-Requires Python 3.7+ and supports only Mac and Linux
+<h3>Login Username</h3>
+Description: Specifies the user of the credentials.<br>
+Required: No<br>
+Options: -lu --login-username &ltusername&gt<br> 
+Accepted values: Alphanumeric value.<br> 
+This parameter allows to customize the authentication mechanism of the protocol.<br> 
+The application will initiate the authentication protocol through user / password as soon as it reads the 
+#AUTH macro within the STF file associated with the protocol. If the authentication by user / password fails, 
+the program will cancel its execution.<br>
+Every time the application reads the keyword &ltlogin-username&gt inside the STF file, it will be replaced by the 
+value of this parameter. 
 
-## Command Line Options
+<h3>Login Password</h3>
+Description: Specifies the password of the credentials.<br> 
+Required: No<br>
+Options: -lu --login-password &ltpassword&gt<br>
+Accepted values: Alphanumeric value.<br>
+This parameter allows to customize the authentication mechanism of the protocol.<br> 
+Every time the application reads the keyword &ltlogin-password&gt inside the STF file, it will be replaced by the 
+value of this parameter. 
 
-```bash
-$ njsscan
-usage: njsscan [-h] [--json] [--sarif] [--sonarqube] [--html] [-o OUTPUT] [-c CONFIG] [--missing-controls] [-w] [-v] [path ...]
+<h3>Buffer Size Length</h3>
+Description: Specifies the buffer size.<br> 
+Required: No<br>
+Options: -bs --buffer-size-length &ltsize&gt<br>
+Accepted values: Numeric value greater than 0.<br> 
+Default value: 1024<br>
+This parameter allows to customize the size of the buffer to send.<br>
+Every time the application reads the keyword &ltbuffer&gt inside the STF file, it will be replaced by the sentence 
+{ --buffer-character } * { --buffer- size-length }, in this case for example A*1024. 
 
-positional arguments:
-  path                  Path can be file(s) or directories with source code
+<h3>Buffer Character</h3>
+Description: Specifies the buffer character.<br> 
+Required: No<br>
+Options: -bc --buffer-character &ltcharacter&gt<br> 
+Accepted values: Alphanumeric value.<br>
+Default value: ‘A’
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --json                set output format as JSON
-  --sarif               set output format as SARIF 2.1.0
-  --sonarqube           set output format compatible with SonarQube
-  --html                set output format as HTML
-  -o OUTPUT, --output OUTPUT
-                        output filename to save the result
-  -c CONFIG, --config CONFIG
-                        Location to .njsscan config file
-  --missing-controls    enable missing security controls check
-  -w, --exit-warning    non zero exit code on warning
-  -v, --version         show njsscan version
-```
+<h3>Output Verbose</h3>
+Description: Specifies whether the user wants to obtain more information during the negotiation process 
+with the remote host.<br> 
+Required: No<br>
+Options: -ov --output-verbose<br>
+Accepted values: none 
 
+<h3>Credits</h3>
+Description: View the author of the program.<br> 
+Required: No<br>
+Options: -c --credits<br>
+Alone: Yes, cannot be combined with another parameter. 
 
-## Example Usage
+<h3>Version</h3>
+Description: View the version of the program.<br> 
+Required: No<br>
+Options: -v --version<br>
+Alone: Yes, cannot be combined with another parameter.
 
-```bash
-$ njsscan test.js
-- Pattern Match ████████████████████████████████████████████████████████████ 1
-- Semantic Grep ███████████████████████████ 160
-
-njsscan: v0.1.9 | Ajin Abraham | opensecurity.in
-╒═════════════╤═══════════════════════════════════════════════════════════════════════════════════════════════╕
-│ RULE ID     │ express_xss                                                                                   │
-├─────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ OWASP       │ A1: Injection                                                                                 │
-├─────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ CWE         │ CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')  │
-├─────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ DESCRIPTION │ Untrusted User Input in Response will result in Reflected Cross Site Scripting Vulnerability. │
-├─────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ SEVERITY    │ ERROR                                                                                         │
-├─────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ FILES       │ ╒════════════════╤═══════════════════════════════════════════════╕                            │
-│             │ │ File           │ test.js                                       │                            │
-│             │ ├────────────────┼───────────────────────────────────────────────┤                            │
-│             │ │ Match Position │ 5 - 46                                        │                            │
-│             │ ├────────────────┼───────────────────────────────────────────────┤                            │
-│             │ │ Line Number(s) │ 7: 8                                          │                            │
-│             │ ├────────────────┼───────────────────────────────────────────────┤                            │
-│             │ │ Match String   │ const { name } = req.query;                   │                            │
-│             │ │                │     res.send('<h1> Hello :' + name + "</h1>") │                            │
-│             │ ╘════════════════╧═══════════════════════════════════════════════╛                            │
-╘═════════════╧═══════════════════════════════════════════════════════════════════════════════════════════════╛
-```
-
-## nodejsscan SAST
-
-**nodejsscan**, built on top of **njsscan** provides a full fledged vulnerability management user interface along with other nifty integrations.
-
-![nodejsscan web ui](https://user-images.githubusercontent.com/4301109/83994121-74fe6500-a923-11ea-9ad7-012113f1bb12.png)
-
-See [nodejsscan](https://github.com/ajinabraham/nodejsscan)
-
-## Python API
-
-```python
->>> from njsscan.njsscan import NJSScan
->>> node_source = '/node_source/true_positives/sqli_node.js'
->>> scanner = NJSScan([node_source], json=True, check_controls=False)
->>> scanner.scan()
-{
-    'templates': {},
-    'nodejs': {
-        'node_sqli_injection': {
-            'files': [{
-                'file_path': '/node_source/true_positives/sqli_node.js',
-                'match_position': (1, 24),
-                'match_lines': (4, 11),
-                'match_string': 'var employeeId = req.foo;\n\nvar sql = "SELECT * FROM trn_employee WHERE employee_id = " + employeeId;\n\n\n\nconnection.query(sql, function (error, results, fields) {\n\n    if (error) {\n\n        throw error;\n\n    }\n\n    console.log(results);'
-            }],
-            'metadata': {
-                'owasp': 'A1: Injection',
-                'cwe': "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
-                'description': 'Untrusted input concatinated with raw SQL query can result in SQL Injection.',
-                'severity': 'ERROR'
-            }
-        }
-    },
-    'errors': []
-}
-```
-
-## Configure njsscan
-
-A `.njsscan` file in the root of the source code directory allows you to configure njsscan. You can also use a custom `.njsscan` file using `--config` argument.
-
-```yaml
----
-- nodejs-extensions:
-  - .js
-
-  template-extensions:
-  - .new
-  - .hbs
-  - ''
-
-  ignore-filenames:
-  - skip.js
-
-  ignore-paths:
-  - __MACOSX
-  - skip_dir
-  - node_modules
-
-  ignore-extensions:
-  - .jsx
-
-  ignore-rules:
-  - regex_injection_dos
-  - pug_jade_template
-
-  severity-filter:
-  - WARNING
-  - ERROR
-```
-
-## Suppress Findings
-
-You can suppress findings from javascript source files by adding the comment `// njsscan-ignore: rule_id1, rule_id2` to the line that trigger the findings.
-
-Example:
-
-```javascript
-app.get('/some/redirect', function (req, res) {
-    var target = req.param("target");
-    res.redirect(target); // njsscan-ignore: express_open_redirect
-});
-```
-
-## CI/CD Integrations
-
-You can enable njsscan in your CI/CD or DevSecOps pipelines.
-
-#### Github Action
-
-Add the following to the file `.github/workflows/njsscan.yml`.
-
-```yaml
-name: njsscan
-on:
-  push:
-    branches: [ master, main ]
-  pull_request:
-    branches: [ master, main ]
-jobs:
-  njsscan:
-    runs-on: ubuntu-latest
-    name: njsscan check
-    steps:
-    - name: Checkout the code
-      uses: actions/checkout@v2
-    - name: nodejsscan scan
-      id: njsscan
-      uses: ajinabraham/njsscan-action@master
-      with:
-        args: '.'
-```
-Example: [dvna with njsscan github action](https://github.com/ajinabraham/dvna/actions?query=workflow%3Anjsscan)
-
-#### Github Code Scanning Integration
-
-Add the following to the file `.github/workflows/njsscan_sarif.yml`.
-
-```yaml
-name: njsscan sarif
-on:
-  push:
-    branches: [ master, main ]
-  pull_request:
-    branches: [ master, main ]
-jobs:
-  njsscan:
-    runs-on: ubuntu-latest
-    name: njsscan code scanning
-    steps:
-    - name: Checkout the code
-      uses: actions/checkout@v2
-    - name: nodejsscan scan
-      id: njsscan
-      uses: ajinabraham/njsscan-action@master
-      with:
-        args: '. --sarif --output results.sarif || true'
-    - name: Upload njsscan report
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: results.sarif
-```
-![nodejsscan web ui](https://user-images.githubusercontent.com/4301109/99230041-cfe29500-27bc-11eb-8baa-d5b30e21348d.png)
-
-
-#### Gitlab CI/CD
-
-Add the following to the file `.gitlab-ci.yml`.
-
-```yaml
-stages:
-    - test
-njsscan:
-    image: python
-    before_script:
-        - pip3 install --upgrade njsscan
-    script:
-        - njsscan .
-```
-Example: [dvna with njsscan gitlab](https://gitlab.com/ajinabraham/dvna/-/jobs/602110439)
-
-
-#### Travis CI
-
-Add the following to the file `.travis.yml`.
-
-```yaml
-language: python
-install:
-    - pip3 install --upgrade njsscan
-script:
-    - njsscan .
-```
-
-#### Circle CI
-
-Add the following to the file `.circleci/config.yaml`
-
-```yaml
-version: 2.1
-jobs:
-  njsscan:
-    docker:
-      - image: cimg/python:3.9.6
-    steps:
-      - checkout
-      - run:
-          name: Install njsscan
-          command: pip install --upgrade njsscan
-      - run:
-           name: njsscan check
-           command: njsscan .
-```
-
-## Docker
-
-### Prebuilt image from [DockerHub](https://hub.docker.com/r/opensecurity/njsscan)
-
-```bash
-docker pull opensecurity/njsscan
-docker run -v /path-to-source-dir:/src opensecurity/njsscan /src
-```
-
-### Build Locally
-
-```
-docker build -t njsscan .
-docker run -v /path-to-source-dir:/src njsscan /src
-```
-
-
-
+<h2>STF Files</h2>
+The STF files could be considered as a template, these are simply plain text files, which accept some kind of 
+special words, these files are stored in the <services> folder with a direct association between the protocol 
+and the template and with the extension STF (Service Tester File).<br><br>
+For example for the FTP protocol there is an STF file in the <services> folder called FTP.stf, for SMTP there is 
+an STF file called SMTP.stf and so on.<br><br>
+Once the connection to the remote host is established, the application begins to read the corresponding STF 
+file, later it’ll read line by line until finalizing the file or until it finds an error.<br><br>
+Each line of the file represents a command to send to the remote host, with the particularity that it accepts 
+a series of keywords that will be translated at runtime, these keywords are as follows:<br><br>
+<ul>
+   <li>&ltlogin-username&gt: Each time the application finds this tag inside the file STF, this will be replaced by 
+the value of the parameter -lu --login-username entered by the user.</li>
+   <li>&ltlogin-password&gt: Each time the application finds this tag inside the file STF, this will be replaced by 
+the value of the parameter -lp --login-password entered by the user.</li>
+   <li>&ltbuffer&gt: Each time the application finds this tag inside the file STF, this will be replaced by the 
+values of the parameters { --buffer-character } * { --buffer- size-length } entered by the user.</li>
+   <li>&ltremote-domain&gt: Each time the application finds this tag inside the file STF, this will be replaced by 
+the domain value of the parameter -th --target-hostname-ip entered by the user.</li>
+</ul>
+These files also accept a series of macros that allow to change the behavior of the testing mechanism, These 
+macros are as follows:<br><br>
+<ul>
+   <li>#AUTH: Must be entered without further information, implies that all the sentences that follow will 
+be executed only if the process of authentication has been satisfactory. The authentication process 
+is automatic, for this it is important that the user has entered the user and password as parameters 
+in the application.<br>
+Its use is not obligatory, but in case of applying it we could send commands to the remote server 
+where only the authenticated users can have access</li>
+   <li>#RETURN &ltVALUE&gt : &ltCOMMAND&gt: The command &ltCOMMAND&gt will be sent only if a return value 
+<VALUE> has been returned in the last send process, otherwise the test program will stop, could be 
+considered as a conditional command, in case the remote host has answered in its last command a 
+certain value, the system continues with the test.</li>
+</ul>
